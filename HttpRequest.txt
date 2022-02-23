@@ -11,3 +11,8 @@ http://localhost:8088/api/region/{id}
 
 # DELETE
 http://localhost:8088/api/region/{id}
+
+# Request Body berbentuk JSON
+{
+   "name": "Africa"
+}
