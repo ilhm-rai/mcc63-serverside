@@ -1,0 +1,13 @@
+# GET
+http://localhost:8088/api/region
+http://localhost:8088/api/region/{id}
+http://localhost:8088/api/region/detail?id=1
+
+# POST
+http://localhost:8088/api/region/
+
+# PUT
+http://localhost:8088/api/region/{id}
+
+# DELETE
+http://localhost:8088/api/region/{id}
