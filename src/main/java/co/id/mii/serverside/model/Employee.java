@@ -13,22 +13,26 @@ import lombok.*;
  * @author MSI-JO
  */
 @Entity
-@Table(name = "tb_country")
+@Table(name = "tb_employee")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Country {
-
+public class Employee {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, unique = true)
-    private String code;
-
-    @Column(nullable = false)
-    private String name;
     
-    @ManyToOne
-    private Region region;
+    @Column(nullable = false)
+    private String fullName;
+    
+    private String address;
+    
+    @Column(nullable = false, unique = true)
+    private String email;
+    
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private User user;
+    
 }

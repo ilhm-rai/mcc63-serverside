@@ -5,12 +5,10 @@
  */
 package co.id.mii.serverside.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
+import javax.persistence.*;
+import lombok.*;
 
 /**
  *
@@ -18,6 +16,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "tb_region")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Region {
 
     @Id
@@ -26,29 +27,9 @@ public class Region {
     
     @Column(name = "region_name", nullable = false)
     private String name;
-
-    public Region() {
-    }
-
-    public Region(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
     
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "region")
+    private List<Country> countries;
+ 
 }

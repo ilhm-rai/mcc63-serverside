@@ -5,6 +5,7 @@
  */
 package co.id.mii.serverside.model;
 
+import java.util.List;
 import javax.persistence.*;
 import lombok.*;
 
@@ -13,22 +14,20 @@ import lombok.*;
  * @author MSI-JO
  */
 @Entity
-@Table(name = "tb_country")
+@Table(name = "tb_role")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Country {
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String code;
-
     @Column(nullable = false)
     private String name;
     
-    @ManyToOne
-    private Region region;
+    @ManyToMany(mappedBy = "roles")
+    private List<User> users;
+
 }
