@@ -6,10 +6,11 @@
 package co.id.mii.serverside.controller;
 
 import co.id.mii.serverside.model.Country;
-import co.id.mii.serverside.model.Region;
 import co.id.mii.serverside.service.CountryService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,38 +27,37 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/country")
 public class CountryController {
-    
+
     private CountryService countryService;
 
     @Autowired
     public CountryController(CountryService countryService) {
         this.countryService = countryService;
     }
-    
+
     @GetMapping
-    public List<Country> getAll() {
-        return countryService.getAll();
+    public ResponseEntity<List<Country>> getAll() {
+        return new ResponseEntity(countryService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public Country getById(@PathVariable Long id) {
-        return countryService.getById(id);
+    public ResponseEntity<Country> getById(@PathVariable Long id) {
+        return new ResponseEntity(countryService.getById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public Country create(@RequestBody Country country) {
-        return countryService.create(country);
+    public ResponseEntity<Country> create(@RequestBody Country country) {
+        return new ResponseEntity(countryService.create(country), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public Country update(@PathVariable Long id, @RequestBody Country country) {
-        return countryService.update(id, country);
+    public ResponseEntity<Country> update(@PathVariable Long id, @RequestBody Country country) {
+        return new ResponseEntity(countryService.update(id, country), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public Country delete(@PathVariable Long id) {
-        return countryService.delete(id);
+    public ResponseEntity<Country> delete(@PathVariable Long id) {
+        return new ResponseEntity(countryService.getById(id), HttpStatus.OK);
     }
-    
-    
+
 }
