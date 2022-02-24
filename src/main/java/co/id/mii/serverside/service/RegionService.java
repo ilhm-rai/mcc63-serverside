@@ -31,6 +31,10 @@ public class RegionService {
     public List<Region> getAll() {
         return regionRepository.findAll();
     }
+    
+    public List<Region> getNameContains(String name){
+        return regionRepository.findByNameContains(name);
+    }
 
     public Region getById(Long id) {
         return regionRepository.findById(id).orElseThrow(()
@@ -41,6 +45,9 @@ public class RegionService {
     public Region create(Region region) {
         if (region.getId() != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Region already exist");
+        }
+        if (regionRepository.findByName(region.getName()) != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Region name already exist");
         }
         return regionRepository.save(region);
     }

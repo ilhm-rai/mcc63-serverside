@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -25,17 +26,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/region")
 public class RegionController {
-    
+
     private RegionService regionService;
 
     @Autowired
     public RegionController(RegionService regionService) {
         this.regionService = regionService;
     }
-    
+
     @GetMapping
     public List<Region> getAll() {
-      return regionService.getAll();
+        return regionService.getAll();
+    }
+
+    @GetMapping("/get-name")
+    public List<Region> getById(@RequestParam(name = "name") String name) {
+        return regionService.getNameContains(name);
     }
 
     @GetMapping("/{id}")
@@ -50,7 +56,7 @@ public class RegionController {
 
     @PutMapping("/{id}")
     public Region update(@PathVariable Long id, @RequestBody Region region) {
-       return regionService.update(id, region);
+        return regionService.update(id, region);
     }
 
     @DeleteMapping("/{id}")
@@ -60,10 +66,8 @@ public class RegionController {
 }
 
 /**
- * localhost:8088/api/region/
- * localhost:8088/api/region/
- * 
- * localhost:8088/api/region/detail?id=10 11111
- * localhost:8088/api/region/10 GET
+ * localhost:8088/api/region/ localhost:8088/api/region/
+ *
+ * localhost:8088/api/region/detail?id=10 11111 localhost:8088/api/region/10 GET
  * localhost:8088/api/region/10 PUT
  */

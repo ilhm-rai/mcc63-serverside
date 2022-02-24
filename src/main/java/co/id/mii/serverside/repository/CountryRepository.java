@@ -5,20 +5,18 @@
  */
 package co.id.mii.serverside.repository;
 
-import co.id.mii.serverside.model.Region;
-import java.util.List;
+import co.id.mii.serverside.model.Country;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 /**
  *
  * @author MSI-JO
  */
 @Repository
-public interface RegionRepository extends JpaRepository<Region, Long>{
+public interface CountryRepository extends JpaRepository<Country, Long>{
     
-    Region findByName(String name);
-    List<Region> findByNameContains(String name);
-        
-    // Select name From region Where region.name = (Parameter Name)
+    Country findByCode(String code);
+    Country findByName(String name);
     
 }
