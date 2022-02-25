@@ -12,14 +12,15 @@ import lombok.Data;
  * @author MSI-JO
  */
 @Data
-public class EmployeeData {
+public class EmployeeDto {
+    
+    private Long id;
 
     private String fullName;
-    private String nameUser;
+    
     private String address;
+    
     private String email;
-    private String username;
-    private String password;
-    private Long roleId;
-
+    
+    private UserDto user;
 }
