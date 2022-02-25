@@ -12,7 +12,7 @@ public class Mcc63ServersideApplication {
 		SpringApplication.run(Mcc63ServersideApplication.class, args);
                 System.out.println("Serverside is Running");
 	}
-
+        
         @Bean
         public ModelMapper modelMapper(){
             return new ModelMapper();

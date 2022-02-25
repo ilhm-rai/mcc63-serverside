@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/region")
 public class RegionController {
     
-    private RegionService regionService;
+    private final RegionService regionService;
 
     @Autowired
     public RegionController(RegionService regionService) {
@@ -44,6 +44,16 @@ public class RegionController {
     @GetMapping("/get-name")
     public ResponseEntity<List<Region>> getById(@RequestParam(name = "name") String name) {
         return new ResponseEntity(regionService.getNameContains(name), HttpStatus.OK);
+    }
+    
+    @GetMapping("/get-id-name")
+    public ResponseEntity<List<Region>> getByIdAndName(@RequestParam(name = "id") Long id, @RequestParam(name = "name") String name) {
+        return new ResponseEntity(regionService.getByIdAndName(id,name), HttpStatus.OK);
+    }
+    
+    @GetMapping("/filterByRegionName")
+    public List<String> getFilterCountryByRegionName(@RequestParam(name = "name") String name){
+        return regionService.getFilterCountryByRegionName(name);
     }
 
     @GetMapping("/{id}")

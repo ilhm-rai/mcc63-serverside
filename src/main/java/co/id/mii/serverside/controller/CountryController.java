@@ -6,10 +6,10 @@
 package co.id.mii.serverside.controller;
 
 import co.id.mii.serverside.model.Country;
+import co.id.mii.serverside.model.dto.CountryData;
 import co.id.mii.serverside.service.CountryService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,8 +47,8 @@ public class CountryController {
     }
 
     @PostMapping
-    public ResponseEntity<Country> create(@RequestBody Country country) {
-        return new ResponseEntity(countryService.create(country), HttpStatus.CREATED);
+    public ResponseEntity<Country> create(@RequestBody CountryData countryData) {
+        return new ResponseEntity(countryService.create(countryData), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
