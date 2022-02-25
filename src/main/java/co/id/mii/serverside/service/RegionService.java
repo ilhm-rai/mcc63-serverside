@@ -35,6 +35,14 @@ public class RegionService {
     public List<Region> getNameContains(String name){
         return regionRepository.findByNameContains(name);
     }
+    
+    public Region getByIdAndName(Long id, String name){
+        return regionRepository.findByIdAndName(id, name);
+    }
+    
+    public List<String> getFilterCountryByRegionName(String name){
+        return regionRepository.filterCountryByRegionName(name);
+    }
 
     public Region getById(Long id) {
         return regionRepository.findById(id).orElseThrow(()

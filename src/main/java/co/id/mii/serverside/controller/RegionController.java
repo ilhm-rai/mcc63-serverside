@@ -45,6 +45,16 @@ public class RegionController {
     public ResponseEntity<List<Region>> getById(@RequestParam(name = "name") String name) {
         return new ResponseEntity(regionService.getNameContains(name), HttpStatus.OK);
     }
+    
+    @GetMapping("/get-id-name")
+    public ResponseEntity<List<Region>> getByIdAndName(@RequestParam(name = "id") Long id, @RequestParam(name = "name") String name) {
+        return new ResponseEntity(regionService.getByIdAndName(id,name), HttpStatus.OK);
+    }
+    
+    @GetMapping("/filterByRegionName")
+    public List<String> getFilterCountryByRegionName(@RequestParam(name = "name") String name){
+        return regionService.getFilterCountryByRegionName(name);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Region> getById(@PathVariable Long id) {
