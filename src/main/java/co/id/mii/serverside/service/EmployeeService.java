@@ -6,15 +6,14 @@
 package co.id.mii.serverside.service;
 
 import co.id.mii.serverside.model.Employee;
-import co.id.mii.serverside.model.Role;
 import co.id.mii.serverside.model.User;
-import co.id.mii.serverside.model.dto.EmployeeData;
 import co.id.mii.serverside.repository.EmployeeRepository;
-import java.util.ArrayList;
 import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  *
@@ -34,28 +33,26 @@ public class EmployeeService {
         this.roleService = roleService;
     }
 
-    public Employee create(EmployeeData employeeData) {
-//        Employee employee = new Employee();
-//        employee.setAddress(employeeData.getAddress());
-//        employee.setEmail(employeeData.getEmail());
-//        employee.setFullName(employeeData.getFullName());
-//
-//        User user = new User();
-//        user.setIsAccountLocked(false);
-//        user.setPassword(employeeData.getPassword());
-//        user.setUsername(employeeData.getUsername());
-//        user.setEmployee(employee);
-        Employee employee = modelMapper.map(employeeData, Employee.class);
-        User user = modelMapper.map(employeeData, User.class);
+    public Employee create(Employee employee) {
+        User user = employee.getUser();
         user.setEmployee(employee);
-        user.setIsAccountLocked(false);
-
-        List<Role> role = new ArrayList<>();
-        role.add(roleService.getById(employeeData.getRoleId()));
-        user.setRoles(role);
+        user.setIsAccountLocked(Boolean.FALSE);
         employee.setUser(user);
-
         return employeeRepository.save(employee);
     }
+    
+    public List<Employee> getEmployeesList() {
+        return employeeRepository.findAll();
+    }
+    
+    public Employee getById(Long id) {
+        return employeeRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not Found")
+        );
+    }
 
+    public void delete(Long id) {
+        Employee emp = getById(id);
+        employeeRepository.delete(emp);
+    }
 }
