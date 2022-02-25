@@ -6,6 +6,7 @@
 package co.id.mii.serverside.controller;
 
 import co.id.mii.serverside.model.Country;
+import co.id.mii.serverside.model.dto.CountryData;
 import co.id.mii.serverside.service.CountryService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +47,8 @@ public class CountryController {
     }
 
     @PostMapping
-    public ResponseEntity<Country> create(@RequestBody Country country) {
-        return new ResponseEntity(countryService.create(country), HttpStatus.CREATED);
+    public ResponseEntity<Country> create(@RequestBody CountryData countryData) {
+        return new ResponseEntity(countryService.create(countryData), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

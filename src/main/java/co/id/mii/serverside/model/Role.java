@@ -17,7 +17,7 @@ import lombok.*;
 @Table(name = "tb_role")
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor  
 public class Role {
 
     @Id
@@ -26,8 +26,8 @@ public class Role {
 
     @Column(nullable = false)
     private String name;
-    
-    @ManyToMany(mappedBy = "roles")
+
+    @ManyToMany
     private List<User> users;
 
 }

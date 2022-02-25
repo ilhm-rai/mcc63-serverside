@@ -5,7 +5,9 @@
  */
 package co.id.mii.serverside.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 import lombok.*;
 
@@ -15,26 +17,33 @@ import lombok.*;
  */
 @Entity
 @Table(name = "tb_user")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    
+
     @Id
     private Long id;
-    
+
     private String username;
-    
+
     private String password;
-    
+
     private Boolean isAccountLocked;
-    
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne
     @MapsId
-    @JoinColumn(name = "id" )
+    @JoinColumn(name = "id")
     private Employee employee;
-    
-    
+
+    public User(String username, String password, Boolean isAccountLocked) {
+        this.username = username;
+        this.password = password;
+        this.isAccountLocked = isAccountLocked;
+    }
+
     @ManyToMany
     @JoinTable(
             name = "user_role",
