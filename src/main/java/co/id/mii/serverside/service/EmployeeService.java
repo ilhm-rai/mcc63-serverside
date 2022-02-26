@@ -9,7 +9,6 @@ import co.id.mii.serverside.model.Employee;
 import co.id.mii.serverside.model.User;
 import co.id.mii.serverside.repository.EmployeeRepository;
 import java.util.List;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,20 +16,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 /**
  *
- * @author MSI-JO
+ * @author RAI
  */
 @Service
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final ModelMapper modelMapper;
-    private final RoleService roleService;
 
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository, ModelMapper modelMapper, RoleService roleService) {
+    public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
-        this.modelMapper = modelMapper;
-        this.roleService = roleService;
     }
 
     public Employee create(Employee employee) {
