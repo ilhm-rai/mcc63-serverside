@@ -21,8 +21,8 @@ public interface CountryRepository extends JpaRepository<Country, Long> {
     Country findByCode(String code);
     Country findByName(String name);
     
-    @Query(value = "SELECT c.code, c.name FROM tb_country c "
-            + "INNER JOIN tb_region r ON c.region_id = r.id"
-            + "WHERE r.name = ?1", nativeQuery = true)
+    @Query(value = "SELECT c.* FROM tb_country c "
+            + "INNER JOIN tb_region r ON c.region_id = r.id "
+            + "WHERE r.region_name = ?1", nativeQuery = true)
     List<Country> getCountriesByRegionName(String regionName);
 }
