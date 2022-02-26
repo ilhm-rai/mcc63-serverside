@@ -8,7 +8,6 @@ package co.id.mii.serverside.service;
 import co.id.mii.serverside.model.Country;
 import co.id.mii.serverside.repository.CountryRepository;
 import java.util.List;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -44,7 +43,7 @@ public class CountryService {
         }
         
         if (countryRepository.findByName(country.getName()) != null) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Country Name already exist");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Country name already exist");
         }
         
 //        Country country = new Country();
