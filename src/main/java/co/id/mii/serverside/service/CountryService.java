@@ -6,7 +6,6 @@
 package co.id.mii.serverside.service;
 
 import co.id.mii.serverside.model.Country;
-import co.id.mii.serverside.model.dto.CountryData;
 import co.id.mii.serverside.repository.CountryRepository;
 import java.util.List;
 import org.modelmapper.ModelMapper;
@@ -22,15 +21,11 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class CountryService {
     
-    private CountryRepository countryRepository;
-    private RegionService regionService;
-    private ModelMapper modelMapper;
+    private final CountryRepository countryRepository;
 
     @Autowired
-    public CountryService(CountryRepository countryRepository, RegionService regionService, ModelMapper modelMapper) {
+    public CountryService(CountryRepository countryRepository) {
         this.countryRepository = countryRepository;
-        this.regionService = regionService;
-        this.modelMapper = modelMapper;
     }
     
     public List<Country> getAll() {
@@ -43,14 +38,12 @@ public class CountryService {
         );
     }
     
-    public Country create(CountryData countryData) {
-//        if (country.getId() != null) {
-//            throw new ResponseStatusException(HttpStatus.CONFLICT, "Country id already exist");
-//        }
-        if (countryRepository.findByCode(countryData.getCode()) != null) {
+    public Country create(Country country) {
+        if (countryRepository.findByCode(country.getCode()) != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Country code already exist");
         }
-        if (countryRepository.findByName(countryData.getName()) != null) {
+        
+        if (countryRepository.findByName(country.getName()) != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Country Name already exist");
         }
         
@@ -58,8 +51,8 @@ public class CountryService {
 //        country.setCode(countryData.getCode());
 //        country.setName(countryData.getName());
         
-        Country country = modelMapper.map(countryData, Country.class);
-        country.setRegion(regionService.getById(countryData.getRegionId()));
+//        Country country = modelMapper.map(country, Country.class);
+//        country.setRegion(regionService.getById(country.getRegionId()));
         
         return countryRepository.save(country);
     }
@@ -77,6 +70,7 @@ public class CountryService {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Update Failed: Country name already exist!");
             }
         }
+        
         country.setId(id);
         return countryRepository.save(country);
     }
