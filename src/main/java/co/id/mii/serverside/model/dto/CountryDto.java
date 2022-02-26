@@ -9,10 +9,11 @@ import lombok.Data;
 
 /**
  *
- * @author MSI-JO
+ * @author RAI
  */
 @Data
-public class CountryData {
+public class CountryDto {
+    private Long id;
     private String code;
     private String name;
     private Long regionId;
