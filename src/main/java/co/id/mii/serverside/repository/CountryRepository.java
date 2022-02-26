@@ -6,7 +6,9 @@
 package co.id.mii.serverside.repository;
 
 import co.id.mii.serverside.model.Country;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -19,4 +21,8 @@ public interface CountryRepository extends JpaRepository<Country, Long> {
     Country findByCode(String code);
     Country findByName(String name);
     
+    @Query(value = "SELECT c.code, c.name FROM tb_country c "
+            + "INNER JOIN tb_region r ON c.region_id = r.id"
+            + "WHERE r.name = ?1", nativeQuery = true)
+    List<Country> getCountriesByRegionName(String regionName);
 }

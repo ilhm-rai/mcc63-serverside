@@ -79,4 +79,9 @@ public class CountryService {
         countryRepository.delete(country);
         return country;
     }
+    
+    public List<Country> getCountriesByRegionName(String regionName) {
+        List<Country> countries = countryRepository.getCountriesByRegionName(regionName);
+        return countries;
+    }
 }
