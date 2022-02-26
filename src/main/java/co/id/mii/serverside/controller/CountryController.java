@@ -6,9 +6,14 @@
 package co.id.mii.serverside.controller;
 
 import co.id.mii.serverside.model.Country;
-import co.id.mii.serverside.model.dto.CountryData;
+import co.id.mii.serverside.model.dto.CountryDto;
 import co.id.mii.serverside.service.CountryService;
+import co.id.mii.serverside.service.RegionService;
+import java.text.ParseException;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,15 +35,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class CountryController {
     
     private final CountryService countryService;
+    
+    private final RegionService regionService;
+    
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public CountryController(CountryService countryService) {
+    public CountryController(CountryService countryService, RegionService regionService, ModelMapper modelMapper) {
         this.countryService = countryService;
+        this.regionService = regionService;
+        this.modelMapper = modelMapper;
     }
     
     @GetMapping
-    public ResponseEntity<List<Country>> getAll() {
-        return new ResponseEntity(countryService.getAll(), HttpStatus.OK);
+    public ResponseEntity<List<CountryDto>> getAll() {
+        List<Country> countries = countryService.getAll();
+        return new ResponseEntity(countries.stream().map(this::convertToDto).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -47,12 +59,24 @@ public class CountryController {
     }
 
     @PostMapping
-    public ResponseEntity<Country> create(@RequestBody CountryData countryData) {
-        return new ResponseEntity(countryService.create(countryData), HttpStatus.CREATED);
+    public ResponseEntity<Country> create(@RequestBody CountryDto countryDto) throws ParseException {
+        if (countryDto.getId() != null) {
+            countryDto.setId(null);
+        }
+        
+        Country country = convertToEntity(countryDto);
+        country.setRegion(regionService.getById(countryDto.getRegionId()));
+        return new ResponseEntity(countryService.create(country), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Country> update(@PathVariable Long id, @RequestBody Country country) {
+    public ResponseEntity<Country> update(@PathVariable Long id, @RequestBody CountryDto countryDto) throws ParseException {
+        if(!Objects.equals(id, countryDto.getId())){
+            throw new IllegalArgumentException("IDs don't match");
+        }
+        
+        Country country = convertToEntity(countryDto);
+        country.setRegion(regionService.getById(countryDto.getRegionId()));
         return new ResponseEntity(countryService.update(id, country), HttpStatus.CREATED);
     }
 
@@ -60,5 +84,14 @@ public class CountryController {
     public ResponseEntity<Country> delete(@PathVariable Long id) {
         return new ResponseEntity(countryService.getById(id), HttpStatus.OK);
     }
+    
+    private CountryDto convertToDto(Country country) {
+        CountryDto countryDto = modelMapper.map(country, CountryDto.class);
+        return countryDto;
+    }
 
+    private Country convertToEntity(CountryDto countryDto) throws ParseException {
+        Country country = modelMapper.map(countryDto, Country.class);
+        return country;
+    }
 }
