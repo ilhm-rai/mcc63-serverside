@@ -36,15 +36,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-<<<<<<< HEAD
-        
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        
-=======
                 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -57,23 +48,11 @@
             <version>3.0.0</version>
         </dependency>
                 
-                
->>>>>>> 12b073b2b37a1423656bbe88f7311def64c32fec
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-<<<<<<< HEAD
-        
-        <!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
-        <dependency>
-            <groupId>org.modelmapper</groupId>
-            <artifactId>modelmapper</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-=======
->>>>>>> 12b073b2b37a1423656bbe88f7311def64c32fec
     </dependencies>
 
     <build>
@@ -81,7 +60,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-<<<<<<< HEAD
                 <configuration>
                     <excludes>
                         <exclude>
@@ -90,8 +68,6 @@
                         </exclude>
                     </excludes>
                 </configuration>
-=======
->>>>>>> 12b073b2b37a1423656bbe88f7311def64c32fec
             </plugin>
         </plugins>
     </build>
