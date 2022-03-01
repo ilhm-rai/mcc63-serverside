@@ -5,21 +5,16 @@
  */
 package co.id.mii.serverside.controller;
 
-import co.id.mii.serverside.model.Employee;
 import co.id.mii.serverside.model.dto.EmployeeDto;
 import co.id.mii.serverside.service.EmployeeService;
 import java.text.ParseException;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
- * @author MSI-JO
+ * @author RAI
  */
 @RestController
 @RequestMapping("/employee")
@@ -36,21 +31,15 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
-    private final ModelMapper modelMapper;
-
     @Autowired
-    public EmployeeController(EmployeeService employeeService, ModelMapper modelMapper) {
+    public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping
     @ResponseBody
     public List<EmployeeDto> getEmployees() {
-        List<Employee> employee = employeeService.getEmployeesList();
-        return employee.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        return employeeService.getEmployeesList();
     }
 
     @PostMapping
@@ -60,9 +49,8 @@ public class EmployeeController {
         if (employeeDto.getId() != null) {
             employeeDto.setId(null);
         }
-        Employee employee = convertToEntity(employeeDto);
-        Employee employeeCreated = employeeService.create(employee);
-        return convertToDto(employeeCreated);
+        
+        return employeeService.create(employeeDto);
     }
     
     @DeleteMapping(value = "/{id}")
@@ -71,15 +59,5 @@ public class EmployeeController {
     public String delete(@PathVariable("id") Long id) {
         employeeService.delete(id);
         return "Employee deleted.";
-    }
-
-    private EmployeeDto convertToDto(Employee employee) {
-        EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
-        return employeeDto;
-    }
-
-    private Employee convertToEntity(EmployeeDto employeeDto) throws ParseException {
-        Employee employee = modelMapper.map(employeeDto, Employee.class);
-        return employee;
     }
 }

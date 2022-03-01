@@ -38,22 +38,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class CountryController {
     
     private final CountryService countryService;
-    
-    private final RegionService regionService;
-    
-    private final ModelMapper modelMapper;
 
     @Autowired
-    public CountryController(CountryService countryService, RegionService regionService, ModelMapper modelMapper) {
+    public CountryController(CountryService countryService) {
         this.countryService = countryService;
-        this.regionService = regionService;
-        this.modelMapper = modelMapper;
     }
     
     @GetMapping
-    public ResponseEntity<List<CountryDto>> getAll() {
-        List<Country> countries = countryService.getAll();
-        return new ResponseEntity(countries.stream().map(this::convertToDto).collect(Collectors.toList()), HttpStatus.OK);
+    public ResponseEntity<List<Country>> getAll() {
+        return new ResponseEntity(countryService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -67,9 +60,7 @@ public class CountryController {
             countryDto.setId(null);
         }
         
-        Country country = convertToEntity(countryDto);
-        country.setRegion(regionService.getById(countryDto.getRegionId()));
-        return new ResponseEntity(countryService.create(country), HttpStatus.CREATED);
+        return new ResponseEntity(countryService.create(countryDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -78,9 +69,7 @@ public class CountryController {
             throw new IllegalArgumentException("IDs don't match");
         }
         
-        Country country = convertToEntity(countryDto);
-        country.setRegion(regionService.getById(countryDto.getRegionId()));
-        return new ResponseEntity(countryService.update(id, country), HttpStatus.CREATED);
+        return new ResponseEntity(countryService.update(id, countryDto), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
@@ -94,15 +83,5 @@ public class CountryController {
     public List<Country> getCountriesByRegionName(@RequestParam(name = "region") String regionName) {
         List<Country> countries = countryService.getCountriesByRegionName(regionName);
         return countries;
-    }
-    
-    private CountryDto convertToDto(Country country) {
-        CountryDto countryDto = modelMapper.map(country, CountryDto.class);
-        return countryDto;
-    }
-
-    private Country convertToEntity(CountryDto countryDto) throws ParseException {
-        Country country = modelMapper.map(countryDto, Country.class);
-        return country;
     }
 }
