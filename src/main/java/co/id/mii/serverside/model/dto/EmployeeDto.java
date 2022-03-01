@@ -23,4 +23,6 @@ public class EmployeeDto {
     private String email;
     
     private UserDto user;
+    
+    private Long roleId;
 }

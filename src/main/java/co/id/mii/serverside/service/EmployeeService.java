@@ -6,10 +6,12 @@
 package co.id.mii.serverside.service;
 
 import co.id.mii.serverside.model.Employee;
+import co.id.mii.serverside.model.Role;
 import co.id.mii.serverside.model.User;
 import co.id.mii.serverside.model.dto.EmployeeDto;
 import co.id.mii.serverside.repository.EmployeeRepository;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
@@ -29,17 +31,25 @@ public class EmployeeService {
 
     private final ModelMapper modelMapper;
     
+    private final RoleService roleService;
+    
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository, ModelMapper modelMapper) {
+    public EmployeeService(EmployeeRepository employeeRepository, ModelMapper modelMapper, RoleService roleService) {
         this.employeeRepository = employeeRepository;
         this.modelMapper = modelMapper;
+        this.roleService = roleService;
     }
 
-    public EmployeeDto create(EmployeeDto employeeDto) throws ParseException {
+    public EmployeeDto create(EmployeeDto employeeDto) {
         Employee employee = convertToEntity(employeeDto);
         User user = employee.getUser();
         user.setEmployee(employee);
         user.setIsAccountLocked(Boolean.FALSE);
+        
+        List<Role> roles = new ArrayList<>();
+        roles.add(roleService.getById(employeeDto.getRoleId()));
+        
+        user.setRoles(roles);
         employee.setUser(user);
         return convertToDto(employeeRepository.save(employee));
     }
@@ -73,7 +83,7 @@ public class EmployeeService {
         return employeeDto;
     }
 
-    private Employee convertToEntity(EmployeeDto employeeDto) throws ParseException {
+    private Employee convertToEntity(EmployeeDto employeeDto) {
         Employee employee = modelMapper.map(employeeDto, Employee.class);
         return employee;
     }
