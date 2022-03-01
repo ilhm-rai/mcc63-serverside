@@ -84,4 +84,12 @@ public class CountryController {
         List<Country> countries = countryService.getCountriesByRegionName(regionName);
         return countries;
     }
+    
+    @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<Country> findByName(@RequestParam(name = "find") String name) {
+        List<Country> countries = countryService.findCountriesByName(name);
+        return countries;
+    }
 }

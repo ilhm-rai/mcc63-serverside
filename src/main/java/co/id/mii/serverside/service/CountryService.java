@@ -97,6 +97,11 @@ public class CountryService {
         List<Country> countries = countryRepository.getCountriesByRegionName(regionName);
         return countries;
     }
+    
+    public List<Country> findCountriesByName(String name) {
+        List<Country> countries = countryRepository.findCountriesByName(name);
+        return countries;
+    }
 
     private CountryDto convertToDto(Country country) {
         CountryDto countryDto = modelMapper.map(country, CountryDto.class);
