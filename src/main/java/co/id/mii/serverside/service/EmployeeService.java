@@ -55,6 +55,13 @@ public class EmployeeService {
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not Found")
         );
     }
+    
+    public Employee update(Long id, Employee employee) {
+        Employee e = getById(id);
+        employee.setId(id);
+        employee.setUser(e.getUser());
+        return employeeRepository.save(employee);
+    }
 
     public void delete(Long id) {
         Employee emp = getById(id);
