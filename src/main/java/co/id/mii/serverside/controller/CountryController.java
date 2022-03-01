@@ -8,12 +8,9 @@ package co.id.mii.serverside.controller;
 import co.id.mii.serverside.model.Country;
 import co.id.mii.serverside.model.dto.CountryDto;
 import co.id.mii.serverside.service.CountryService;
-import co.id.mii.serverside.service.RegionService;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -85,10 +82,10 @@ public class CountryController {
         return countries;
     }
     
-    @GetMapping("/")
+    @GetMapping("/find")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<Country> findByName(@RequestParam(name = "find") String name) {
+    public List<Country> findByName(@RequestParam(name = "name") String name) {
         List<Country> countries = countryService.findCountriesByName(name);
         return countries;
     }
