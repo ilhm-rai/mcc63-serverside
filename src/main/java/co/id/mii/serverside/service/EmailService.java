@@ -8,6 +8,8 @@ package co.id.mii.serverside.service;
 import co.id.mii.serverside.model.dto.MultipleRecipients;
 import co.id.mii.serverside.model.dto.SendEmail;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,6 @@ public class EmailService {
     public SendEmail sendSimpleEmail(SendEmail sendEmail) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("Rizky Ardi Ilhami");
             message.setText(sendEmail.getToEmail());
             message.setSubject(sendEmail.getSubject());
             message.setText(sendEmail.getBody());
@@ -70,7 +71,6 @@ public class EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, true);
 
-            mimeMessageHelper.setFrom("rizkyardi.ilhami06@gmail.com");
             mimeMessageHelper.setTo(sendEmail.getToEmail());
             mimeMessageHelper.setSubject(sendEmail.getSubject());
             mimeMessageHelper.setText(sendEmail.getBody());
@@ -92,7 +92,6 @@ public class EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, "utf-8");
 
-            mimeMessageHelper.setFrom("rizkyardi.ilhami06@gmail.com");
             mimeMessageHelper.setTo(sendEmail.getToEmail());
             mimeMessageHelper.setSubject(sendEmail.getSubject());
             mimeMessageHelper.setText(sendEmail.getBody(), true);
@@ -101,6 +100,27 @@ public class EmailService {
             System.out.println("Mail sent...");
         } catch (MessagingException | MailException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+        
+        return sendEmail;
+    }
+    
+    public SendEmail sendEmailHtmlWithAttachment(SendEmail sendEmail) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            
+            helper.setTo(sendEmail.getToEmail());
+            helper.setText(sendEmail.getBody());
+            helper.setSubject(sendEmail.getSubject());
+            
+            FileSystemResource res = new FileSystemResource(new File(sendEmail.getAttachment()));
+            helper.addInline(res.getFilename(), res);
+            
+            mailSender.send(message);
+            System.out.println("Mail succesfuly sent...");
+        } catch (MessagingException ex) {
+            Logger.getLogger(EmailService.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return sendEmail;

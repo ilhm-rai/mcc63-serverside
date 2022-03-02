@@ -50,4 +50,9 @@ public class EmailController {
     public ResponseEntity<SendEmail> sendEmailWithHtml(@RequestBody SendEmail emailData) {
         return new ResponseEntity(emailService.sendEmailWithHtml(emailData), HttpStatus.OK);
     }
+    
+    @PostMapping("/sendHtmlWithAttachment")
+    public ResponseEntity<SendEmail> sendEmailHtmlWithAttachment(@RequestBody SendEmail emailData) {
+        return new ResponseEntity(emailService.sendEmailHtmlWithAttachment(emailData), HttpStatus.OK);
+    }
 }
