@@ -111,7 +111,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             
             helper.setTo(sendEmail.getToEmail());
-            helper.setText(sendEmail.getBody());
+            helper.setText(sendEmail.getBody(), true);
             helper.setSubject(sendEmail.getSubject());
             
             FileSystemResource res = new FileSystemResource(new File(sendEmail.getAttachment()));
