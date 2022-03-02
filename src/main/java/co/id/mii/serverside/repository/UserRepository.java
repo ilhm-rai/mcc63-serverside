@@ -6,6 +6,7 @@
 package co.id.mii.serverside.repository;
 
 import co.id.mii.serverside.model.User;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +17,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
     
+    Optional<User> findByUsernameOrEmployee_Email(String username, String Email);
 }

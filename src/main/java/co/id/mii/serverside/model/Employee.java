@@ -5,6 +5,7 @@
  */
 package co.id.mii.serverside.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 import lombok.*;
 
@@ -31,7 +32,7 @@ public class Employee {
     @Column(nullable = false, unique = true)
     private String email;
     
-    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn
     private User user;
     

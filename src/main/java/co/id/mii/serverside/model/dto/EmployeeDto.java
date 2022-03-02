@@ -5,11 +5,12 @@
  */
 package co.id.mii.serverside.model.dto;
 
+import java.util.List;
 import lombok.Data;
 
 /**
  *
- * @author MSI-JO
+ * @author RAI
  */
 @Data
 public class EmployeeDto {
@@ -24,5 +25,5 @@ public class EmployeeDto {
     
     private UserDto user;
     
-    private Long roleId;
+    private List<Long> roleIds;
 }

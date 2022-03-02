@@ -14,6 +14,7 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,6 +52,7 @@ public class CountryController {
         return new ResponseEntity(countryService.getById(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Country> create(@RequestBody CountryDto countryDto) throws ParseException {
         if (countryDto.getId() != null) {
@@ -60,6 +62,7 @@ public class CountryController {
         return new ResponseEntity(countryService.create(countryDto), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Country> update(@PathVariable Long id, @RequestBody CountryDto countryDto) throws ParseException {
         if(!Objects.equals(id, countryDto.getId())){
@@ -69,12 +72,13 @@ public class CountryController {
         return new ResponseEntity(countryService.update(id, countryDto), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Country> delete(@PathVariable Long id) {
         return new ResponseEntity(countryService.delete(id), HttpStatus.OK);
     }
     
-    @GetMapping("/")
+    @GetMapping("?region")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<Country> getCountriesByRegionName(@RequestParam(name = "region") String regionName) {
@@ -82,7 +86,7 @@ public class CountryController {
         return countries;
     }
     
-    @GetMapping("/find")
+    @GetMapping("?name")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<Country> findByName(@RequestParam(name = "name") String name) {

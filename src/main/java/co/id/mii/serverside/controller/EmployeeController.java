@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,14 +41,15 @@ public class EmployeeController {
 
     @GetMapping
     @ResponseBody
-    public List<EmployeeDto> getEmployees() {
+    public List<Employee> getEmployees() {
         return employeeService.getEmployeesList();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public EmployeeDto create(@RequestBody EmployeeDto employeeDto) throws ParseException {
+    public Employee create(@RequestBody EmployeeDto employeeDto) throws ParseException {
         if (employeeDto.getId() != null) {
             employeeDto.setId(null);
         }
@@ -55,6 +57,7 @@ public class EmployeeController {
         return employeeService.create(employeeDto);
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -62,6 +65,7 @@ public class EmployeeController {
         return employeeService.update(id, employee);
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody

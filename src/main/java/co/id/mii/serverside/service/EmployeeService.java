@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -33,31 +34,35 @@ public class EmployeeService {
     
     private final RoleService roleService;
     
+    private final PasswordEncoder passwordEncoder;
+    
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository, ModelMapper modelMapper, RoleService roleService) {
+    public EmployeeService(EmployeeRepository employeeRepository, ModelMapper modelMapper, RoleService roleService, PasswordEncoder passwordEncoder) {
         this.employeeRepository = employeeRepository;
         this.modelMapper = modelMapper;
         this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public EmployeeDto create(EmployeeDto employeeDto) {
+    public Employee create(EmployeeDto employeeDto) {
+        User user = modelMapper.map(employeeDto.getUser(), User.class);
         Employee employee = convertToEntity(employeeDto);
-        User user = employee.getUser();
         user.setEmployee(employee);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setIsAccountLocked(Boolean.FALSE);
         
-        List<Role> roles = new ArrayList<>();
-        roles.add(roleService.getById(employeeDto.getRoleId()));
+        List<Role> roles = employeeDto.getRoleIds()
+                .stream()
+                .map(id -> roleService.getById(id))
+                .collect(Collectors.toList());
         
         user.setRoles(roles);
         employee.setUser(user);
-        return convertToDto(employeeRepository.save(employee));
+        return employeeRepository.save(employee);
     }
     
-    public List<EmployeeDto> getEmployeesList() {
-        return employeeRepository.findAll().stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+    public List<Employee> getEmployeesList() {
+        return employeeRepository.findAll();
     }
     
     public Employee getById(Long id) {

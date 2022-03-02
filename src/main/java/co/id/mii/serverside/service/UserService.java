@@ -5,6 +5,7 @@
  */
 package co.id.mii.serverside.service;
 
+import co.id.mii.serverside.model.Employee;
 import co.id.mii.serverside.model.User;
 import co.id.mii.serverside.model.dto.EmployeeDto;
 import co.id.mii.serverside.repository.UserRepository;
@@ -32,7 +33,7 @@ public class UserService {
         this.employeeService = employeeService;
     }
     
-    public EmployeeDto create(EmployeeDto employeeDto) throws ParseException {
+    public Employee create(EmployeeDto employeeDto) throws ParseException {
        return employeeService.create(employeeDto);
     }
     
