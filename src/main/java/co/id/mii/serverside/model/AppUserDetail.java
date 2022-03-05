@@ -5,8 +5,9 @@
  */
 package co.id.mii.serverside.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,10 +26,19 @@ public class AppUserDetail implements UserDetails {
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getRoles()
-                .stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()))
-                .collect(Collectors.toList());
+//        return user.getRoles()
+//                .stream()
+//                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()))
+//                .collect(Collectors.toList());
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        
+        user.getRoles().forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()));
+            role.getPrivileges().forEach(privilege -> authorities.add(new SimpleGrantedAuthority(privilege.getName().toUpperCase())));
+        });
+        
+        return authorities;
     }
 
     @Override
