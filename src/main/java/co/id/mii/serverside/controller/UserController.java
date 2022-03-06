@@ -70,4 +70,11 @@ public class UserController {
             return "verify_fail";
         }
     }
+
+    @PutMapping(value = "/{id}/changepassword")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public User changePassword(@PathVariable Long id, @RequestBody String newPassword) {
+        return userService.changePassword(id, newPassword);
+    }
 }

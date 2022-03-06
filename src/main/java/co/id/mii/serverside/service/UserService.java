@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -24,13 +25,14 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final EmployeeService employeeService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, EmployeeService employeeService) {
+    public UserService(UserRepository userRepository, EmployeeService employeeService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.employeeService = employeeService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Employee create(EmployeeDto employeeDto) throws ParseException {
@@ -71,5 +73,11 @@ public class UserService {
             userRepository.save(user);
             return true;
         }
+    }
+    
+    public User changePassword(Long id, String newPassword) {
+        User user = getById(id);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        return userRepository.save(user);
     }
 }
