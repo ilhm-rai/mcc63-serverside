@@ -25,12 +25,11 @@ public class User {
 
     @Id
     private Long id;
-
     private String username;
-
     private String password;
-
     private Boolean isAccountLocked;
+    private Boolean isEnabled;
+    private String verificationCode;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne

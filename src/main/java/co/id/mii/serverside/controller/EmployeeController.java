@@ -7,9 +7,12 @@ package co.id.mii.serverside.controller;
 
 import co.id.mii.serverside.model.Employee;
 import co.id.mii.serverside.model.dto.EmployeeDto;
+import co.id.mii.serverside.model.dto.Register;
 import co.id.mii.serverside.service.EmployeeService;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.List;
+import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author RAI
  */
+@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -39,13 +43,14 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
+    @PreAuthorize("hasAuthority('READ_DATA')")
     @GetMapping
     @ResponseBody
     public List<Employee> getEmployees() {
         return employeeService.getEmployeesList();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('CREATE_DATA')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -57,7 +62,15 @@ public class EmployeeController {
         return employeeService.create(employeeDto);
     }
     
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('CREATE_DATA')")
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public Employee register(@RequestBody Register register) throws MessagingException, UnsupportedEncodingException {
+        return employeeService.register(register);
+    }
+    
+    @PreAuthorize("hasAuthority('UPDATE_DATA')")
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -65,7 +78,7 @@ public class EmployeeController {
         return employeeService.update(id, employee);
     }
     
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('DETELE_DATA')")
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
