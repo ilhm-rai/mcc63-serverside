@@ -63,7 +63,7 @@ public class EmployeeController {
     }
     
     @PreAuthorize("hasAuthority('CREATE_DATA')")
-    @PostMapping
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public Employee register(@RequestBody Register register) throws MessagingException, UnsupportedEncodingException {
