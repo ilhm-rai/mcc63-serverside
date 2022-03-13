@@ -24,7 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class CountryService {
 
     private final CountryRepository countryRepository;
-    
+
     private final RegionService regionService;
 
     private final ModelMapper modelMapper;
@@ -41,9 +41,8 @@ public class CountryService {
     }
 
     public Country getById(Long id) {
-        return countryRepository.findById(id).orElseThrow(()
-                -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Country not Found")
-        );
+        return countryRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Country not Found"));
     }
 
     public Country create(CountryDto countryDto) throws ParseException {
@@ -54,15 +53,15 @@ public class CountryService {
         if (countryRepository.findByName(countryDto.getName()) != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Country name already exist");
         }
-        
+
         Country country = convertToEntity(countryDto);
         country.setRegion(regionService.getById(countryDto.getRegionId()));
 
-//        Country country = new Country();
-//        country.setCode(countryData.getCode());
-//        country.setName(countryData.getName());
-//        Country country = modelMapper.map(country, Country.class);
-//        country.setRegion(regionService.getById(country.getRegionId()));
+        // Country country = new Country();
+        // country.setCode(countryData.getCode());
+        // country.setName(countryData.getName());
+        // Country country = modelMapper.map(country, Country.class);
+        // country.setRegion(regionService.getById(country.getRegionId()));
         return countryRepository.save(country);
     }
 
@@ -79,11 +78,11 @@ public class CountryService {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Update Failed: Country name already exist!");
             }
         }
-        
-        Country country = convertToEntity(countryDto);
-        country.setRegion(country.getRegion());
 
+        Country country = convertToEntity(countryDto);
         country.setId(id);
+        country.setRegion(regionService.getById(countryDto.getRegionId()));
+
         return countryRepository.save(country);
     }
 
@@ -97,7 +96,7 @@ public class CountryService {
         List<Country> countries = countryRepository.getCountriesByRegionName(regionName);
         return countries;
     }
-    
+
     public List<Country> findCountriesByName(String name) {
         List<Country> countries = countryRepository.findCountriesByName(name);
         return countries;

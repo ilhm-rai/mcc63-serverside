@@ -44,8 +44,7 @@ public class EmployeeService {
     public EmployeeService(
             EmployeeRepository employeeRepository, ModelMapper modelMapper,
             RoleService roleService, PasswordEncoder passwordEncoder,
-            EmailService emailService
-    ) {
+            EmailService emailService) {
         this.employeeRepository = employeeRepository;
         this.modelMapper = modelMapper;
         this.roleService = roleService;
@@ -88,7 +87,8 @@ public class EmployeeService {
         user.setRoles(roles);
         employee.setUser(user);
 
-        emailService.sendEmail(employee, "Email Verification", "localhost:8088/user/verify?code=" + user.getVerificationCode(), "Verify");
+        emailService.sendEmail(employee, "Email Verification",
+                "localhost:8088/user/verify?code=" + user.getVerificationCode(), "Verify");
 
         return employeeRepository.save(employee);
     }
@@ -99,8 +99,7 @@ public class EmployeeService {
 
     public Employee getById(Long id) {
         return employeeRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not Found")
-        );
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not Found"));
     }
 
     public Employee update(Long id, Employee employee) {
@@ -113,11 +112,6 @@ public class EmployeeService {
     public void delete(Long id) {
         Employee emp = getById(id);
         employeeRepository.delete(emp);
-    }
-
-    private EmployeeDto convertToDto(Employee employee) {
-        EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
-        return employeeDto;
     }
 
     private Employee convertToEntity(EmployeeDto employeeDto) {

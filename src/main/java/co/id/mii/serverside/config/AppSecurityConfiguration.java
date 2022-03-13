@@ -50,9 +50,9 @@ public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/country**").permitAll()
-                .antMatchers("/region**").permitAll()
-                .antMatchers("/employee**").permitAll()
+                .antMatchers("/country/**").permitAll()
+                .antMatchers("/region/**").permitAll()
+                .antMatchers("/employee/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/region")
 public class RegionController {
-    
+
     private final RegionService regionService;
 
     @Autowired
@@ -46,14 +46,15 @@ public class RegionController {
     public ResponseEntity<List<Region>> getById(@RequestParam(name = "name") String name) {
         return new ResponseEntity(regionService.getNameContains(name), HttpStatus.OK);
     }
-    
+
     @GetMapping("/get-id-name")
-    public ResponseEntity<List<Region>> getByIdAndName(@RequestParam(name = "id") Long id, @RequestParam(name = "name") String name) {
-        return new ResponseEntity(regionService.getByIdAndName(id,name), HttpStatus.OK);
+    public ResponseEntity<List<Region>> getByIdAndName(@RequestParam(name = "id") Long id,
+            @RequestParam(name = "name") String name) {
+        return new ResponseEntity(regionService.getByIdAndName(id, name), HttpStatus.OK);
     }
-    
+
     @GetMapping("/filterByRegionName")
-    public List<String> getFilterCountryByRegionName(@RequestParam(name = "name") String name){
+    public List<String> getFilterCountryByRegionName(@RequestParam(name = "name") String name) {
         return regionService.getFilterCountryByRegionName(name);
     }
 
@@ -62,19 +63,19 @@ public class RegionController {
         return new ResponseEntity(regionService.getById(id), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Region> create(@RequestBody Region region) {
         return new ResponseEntity(regionService.create(region), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Region> update(@PathVariable Long id, @RequestBody Region region) {
         return new ResponseEntity(regionService.update(id, region), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Region> delete(@PathVariable Long id) {
         return new ResponseEntity(regionService.delete(id), HttpStatus.OK);
